@@ -1,4 +1,9 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using petrov_web1.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<petrov_web1Context>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("petrov_web1Context") ?? throw new InvalidOperationException("Connection string 'petrov_web1Context' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
