@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using petrov_web1.Data;
+using petrov_web1.Models;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<petrov_web1Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("petrov_web1Context") ?? throw new InvalidOperationException("Connection string 'petrov_web1Context' not found.")));
@@ -9,6 +10,13 @@ builder.Services.AddDbContext<petrov_web1Context>(options =>
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    SeedData.Initialize(services);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
